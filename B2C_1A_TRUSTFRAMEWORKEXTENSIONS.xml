@@ -1,0 +1,256 @@
+<TrustFrameworkPolicy xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="http://schemas.microsoft.com/online/cpim/schemas/2013/06" PolicySchemaVersion="0.3.0.0" TenantId="$tenantId" PolicyId="B2C_1A_TrustFrameworkExtensions" PublicPolicyUri="http://$tenantId/B2C_1A_TrustFrameworkExtensions" TenantObjectId="$TenantObjectId">
+  <BasePolicy>
+    <TenantId>$tenantId</TenantId>
+    <PolicyId>B2C_1A_TrustFrameworkBase</PolicyId>
+  </BasePolicy>
+  <BuildingBlocks></BuildingBlocks>
+  <ClaimsProviders>
+    <!-- Sample: 2KEYS Test my version Token Issuer technical profile -->
+    <ClaimsProvider>
+      <Domain>2Keys</Domain>
+      <DisplayName>2Keys</DisplayName>
+      <TechnicalProfiles>
+        <TechnicalProfile Id="2KeysSP">
+          <DisplayName>2KeysSP</DisplayName>
+          <Description>Login with your 2Keys account</Description>
+          <Protocol Name="SAML2" />
+          <Metadata>
+            <!-- Keys for making sure the assertion is signed -->
+            <Item Key="RequestsSigned">true</Item>
+            <Item Key="WantsEncryptedAssertions">true</Item>
+            <Item Key="WantsSignedAssertions">true</Item>
+            <Item Key="ResponsesSigned">false</Item>
+            <Item Key="XmlSignatureAlgorithm">Sha256</Item>
+            <!-- The GCKey requires the NameID attribute in the SAML request, these next two lines add them -->
+            <Item Key="NameIdPolicyAllowCreate">true</Item>
+            <Item Key="NameIdPolicyFormat">urn:oasis:names:tc:SAML:2.0:nameid-format:persistent</Item>
+            <!-- Metadata as raw XML -->
+            <Item Key="PartnerEntity"><![CDATA[<?xml version="1.0" encoding="UTF-8" standalone="no"?><EntityDescriptor xmlns="urn:oasis:names:tc:SAML:2.0:metadata" ID="_20190811976e44a69469abe82036dcdf" entityID="https://te.clegc-gckey.gc.ca"><ds:Signature xmlns:ds="http://www.w3.org/2000/09/xmldsig#"><ds:SignedInfo><ds:CanonicalizationMethod Algorithm="http://www.w3.org/2001/10/xml-exc-c14n#"/><ds:SignatureMethod Algorithm="http://www.w3.org/2001/04/xmldsig-more#rsa-sha256"/><ds:Reference URI="#_20190811976e44a69469abe82036dcdf"><ds:Transforms><ds:Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature"/><ds:Transform Algorithm="http://www.w3.org/2001/10/xml-exc-c14n#"/></ds:Transforms><ds:DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256"/><ds:DigestValue>C3vRXRdTxwkkM5EeFWwn/otSJuGHpWETq78SySu4dP4=</ds:DigestValue></ds:Reference></ds:SignedInfo><ds:SignatureValue>mEIUKU4BcHiBcYh5//2nmguEorFYUZVkFQm59ukKv0EEdN8UJuouJafduVtgK9V4rU8ijjE/VEAcWeXkIxVjVdSgPwBBOhw5ojLaRIQpRoxF8T2uDAHSn+Vj9QvowmwgIWgAvB8wM1x1g8uI6G4KUYhURK5wKuPg4hoWGyzrUZEM8WZ4AeCpxe+pAHsHDa3dPr22cI3V0uQf0wHIgKroIPFjygNhkmQ5r8s9M67/WCluI6x3KCeO08BDWBnKkkRj9i4v+UZvq4VUZ4pHsqljWDykJGgRsYcka9q1lwCPxErib+gGN30SpCQK8RA/F6IeJJ0DdeMxse8UNasAhHroMw==</ds:SignatureValue><ds:KeyInfo><ds:X509Data><ds:X509Certificate>MIIE7DCCA9SgAwIBAgIEVZ/6gDANBgkqhkiG9w0BAQsFADA+MQswCQYDVQQGEwJDQTELMAkGA1UE ChMCR0MxEDAOBgNVBAsTB0dTUy1TUEcxEDAOBgNVBAsTBzFDQS1BQzEwHhcNMTkwNDE2MjA1MDA0 WhcNMjIwNDEzMDIyNzM2WjBMMQswCQYDVQQGEwJDQTELMAkGA1UEChMCR0MxEDAOBgNVBAsTB3Nz Yy1zcGMxHjAcBgNVBAMTFUdDQ0YyS2V5c0dDS2V5LVRFMjAxOTCCASIwDQYJKoZIhvcNAQEBBQAD ggEPADCCAQoCggEBAM0C+5WjiBgcnTvd4mBlTGxyV11ocsOBZzCnCcwxrGC9XMLl+OYnwAtruUkV 6HVYzAdHRmR0OS8ylP3ded5LP8k2isnNGQYm0seBuXRKnBuvZorC+ju8ibe2hJbPFpcK8C7Lwg5Y 9kxl7WE7dhd8fF/owXwDFByzuSQmokKDxLq00rmxcSYi2NY8pwefGF3yiBtNWJ54ox2RhgeovQRI 3Tn8Y8bSJhJZWAacHdEzycRzN6KOC1c4LjHCo8hyf+60azKVP4EOGvw3RRDlpKpZi4UFztQj1ySq WkcWrvtjgYHoPaRqVKIHx/l64FAcrreO1BkxBxMc3BrBFOksGETurbUCAwEAAaOCAeIwggHeMAsG A1UdDwQEAwIHgDBjBgNVHSAEXDBaMFgGCWB8ZQgFAQIDBDBLMEkGCCsGAQUFBwICMD0aO0xpbWl0 ZWQgTGlhYmlsaXR5LiBTZWUgQ1AgLSBSZXNwb25zYWJpbGl06SBsaW1pdOllLiBWb2lyIFBDMFgG CWCGSAGG+mseAQRLDElUaGUgcHJpdmF0ZSBrZXkgY29ycmVzcG9uZGluZyB0byB0aGlzIGNlcnRp ZmljYXRlIG1heSBoYXZlIGJlZW4gZXhwb3J0ZWQuMBoGA1UdEQQTMBGBD2psZXdpc0Aya2V5cy5j YTBhBgNVHR8EWjBYMFagVKBSpFAwTjELMAkGA1UEBhMCQ0ExCzAJBgNVBAoTAkdDMRAwDgYDVQQL EwdHU1MtU1BHMRAwDgYDVQQLEwcxQ0EtQUMxMQ4wDAYDVQQDEwVDUkwyMTArBgNVHRAEJDAigA8y MDE5MDQxNjIwNTAwNFqBDzIwMjIwNDEzMDIyNzM2WjAfBgNVHSMEGDAWgBQwYABRkUGhMdI7jb+1 G1Ooe101NDAdBgNVHQ4EFgQUIJ40p+eZoZGE/flNrlVV3PAcGIMwCQYDVR0TBAIwADAZBgkqhkiG 9n0HQQAEDDAKGwRWOC4yAwIEMDANBgkqhkiG9w0BAQsFAAOCAQEAZNZwYkJQ81rkp2qGPCw+rtGb qeDM7snSvTM5MMbLUuoyDgab4t3gamLaXvev9v4Jzdg4fjqGum9C/FevRl1Kbx9rQ6d40FfRQOhH +Ye4cvYd2UU4qC8LtwP3NzxQvPUmqJoYdrEzeeYSjxywTtugkS4M1gy9nb7+I3B0FQrnzKYF2zrz AqA86horNm/xjGR117N0JPSryfAd8QIl7JEWEJVsket7ynjeII+HSuFEVYnx8jj2XxVbkIjRbHkP 1VMIr4g2kftWXyv2ywi5ytei4As7opfNV2tboYAtsfcvKlzLfnSeBcTfXp7VdFzdgi80Vjn6VWJ5 SRpQITwFrNKJOQ==</ds:X509Certificate></ds:X509Data></ds:KeyInfo></ds:Signature><IDPSSODescriptor ID="js86111642fcec5f24600af6aa0f49652a63ad5d1" WantAuthnRequestsSigned="true" protocolSupportEnumeration="urn:oasis:names:tc:SAML:2.0:protocol"><Extensions><ns1:EntityAttributes xmlns:ns1="urn:oasis:names:tc:SAML:metadata:attribute"><ns2:Attribute xmlns:ns2="urn:oasis:names:tc:SAML:2.0:assertion" Name="urn:oasis:names:tc:SAML:attribute:assurance-certification" NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:uri"><ns2:AttributeValue>urn:gc-ca:cyber-auth:assurance:loa2</ns2:AttributeValue></ns2:Attribute></ns1:EntityAttributes></Extensions><KeyDescriptor use="signing"><ds:KeyInfo xmlns:ds="http://www.w3.org/2000/09/xmldsig#"><ds:X509Data><ds:X509Certificate> MIIE7DCCA9SgAwIBAgIEVZ/6gDANBgkqhkiG9w0BAQsFADA+MQswCQYDVQQGEwJD QTELMAkGA1UEChMCR0MxEDAOBgNVBAsTB0dTUy1TUEcxEDAOBgNVBAsTBzFDQS1B QzEwHhcNMTkwNDE2MjA1MDA0WhcNMjIwNDEzMDIyNzM2WjBMMQswCQYDVQQGEwJD QTELMAkGA1UEChMCR0MxEDAOBgNVBAsTB3NzYy1zcGMxHjAcBgNVBAMTFUdDQ0Yy S2V5c0dDS2V5LVRFMjAxOTCCASIwDQYJKoZIhvcNAQEBBQADggEPADCCAQoCggEB AM0C+5WjiBgcnTvd4mBlTGxyV11ocsOBZzCnCcwxrGC9XMLl+OYnwAtruUkV6HVY zAdHRmR0OS8ylP3ded5LP8k2isnNGQYm0seBuXRKnBuvZorC+ju8ibe2hJbPFpcK 8C7Lwg5Y9kxl7WE7dhd8fF/owXwDFByzuSQmokKDxLq00rmxcSYi2NY8pwefGF3y iBtNWJ54ox2RhgeovQRI3Tn8Y8bSJhJZWAacHdEzycRzN6KOC1c4LjHCo8hyf+60 azKVP4EOGvw3RRDlpKpZi4UFztQj1ySqWkcWrvtjgYHoPaRqVKIHx/l64FAcrreO 1BkxBxMc3BrBFOksGETurbUCAwEAAaOCAeIwggHeMAsGA1UdDwQEAwIHgDBjBgNV HSAEXDBaMFgGCWB8ZQgFAQIDBDBLMEkGCCsGAQUFBwICMD0aO0xpbWl0ZWQgTGlh YmlsaXR5LiBTZWUgQ1AgLSBSZXNwb25zYWJpbGl06SBsaW1pdOllLiBWb2lyIFBD MFgGCWCGSAGG+mseAQRLDElUaGUgcHJpdmF0ZSBrZXkgY29ycmVzcG9uZGluZyB0 byB0aGlzIGNlcnRpZmljYXRlIG1heSBoYXZlIGJlZW4gZXhwb3J0ZWQuMBoGA1Ud EQQTMBGBD2psZXdpc0Aya2V5cy5jYTBhBgNVHR8EWjBYMFagVKBSpFAwTjELMAkG A1UEBhMCQ0ExCzAJBgNVBAoTAkdDMRAwDgYDVQQLEwdHU1MtU1BHMRAwDgYDVQQL EwcxQ0EtQUMxMQ4wDAYDVQQDEwVDUkwyMTArBgNVHRAEJDAigA8yMDE5MDQxNjIw NTAwNFqBDzIwMjIwNDEzMDIyNzM2WjAfBgNVHSMEGDAWgBQwYABRkUGhMdI7jb+1 G1Ooe101NDAdBgNVHQ4EFgQUIJ40p+eZoZGE/flNrlVV3PAcGIMwCQYDVR0TBAIw ADAZBgkqhkiG9n0HQQAEDDAKGwRWOC4yAwIEMDANBgkqhkiG9w0BAQsFAAOCAQEA ZNZwYkJQ81rkp2qGPCw+rtGbqeDM7snSvTM5MMbLUuoyDgab4t3gamLaXvev9v4J zdg4fjqGum9C/FevRl1Kbx9rQ6d40FfRQOhH+Ye4cvYd2UU4qC8LtwP3NzxQvPUm qJoYdrEzeeYSjxywTtugkS4M1gy9nb7+I3B0FQrnzKYF2zrzAqA86horNm/xjGR1 17N0JPSryfAd8QIl7JEWEJVsket7ynjeII+HSuFEVYnx8jj2XxVbkIjRbHkP1VMI r4g2kftWXyv2ywi5ytei4As7opfNV2tboYAtsfcvKlzLfnSeBcTfXp7VdFzdgi80 Vjn6VWJ5SRpQITwFrNKJOQ==          </ds:X509Certificate></ds:X509Data></ds:KeyInfo></KeyDescriptor><KeyDescriptor use="encryption"><ds:KeyInfo xmlns:ds="http://www.w3.org/2000/09/xmldsig#"><ds:X509Data><ds:X509Certificate> MIIEvzCCA6egAwIBAgIEVZ/6gTANBgkqhkiG9w0BAQsFADA+MQswCQYDVQQGEwJD QTELMAkGA1UEChMCR0MxEDAOBgNVBAsTB0dTUy1TUEcxEDAOBgNVBAsTBzFDQS1B QzEwHhcNMTkwNDE2MjA1MDA0WhcNMjIwNDEzMDIyNzM2WjBMMQswCQYDVQQGEwJD QTELMAkGA1UEChMCR0MxEDAOBgNVBAsTB3NzYy1zcGMxHjAcBgNVBAMTFUdDQ0Yy S2V5c0dDS2V5LVRFMjAxOTCCASIwDQYJKoZIhvcNAQEBBQADggEPADCCAQoCggEB ANHIQ85VaQZTjSj2iWwRjTZw1XYLVaJPyS+iAcj1zC/Tc0vPcff/t5JyvOq3rsAa pAhoD0uf78z5vJH6kd/IQR0q7x6FOkwq2rPBgM0LDDU/E8H1YQpkk5fdaYw6XRDW FmaPLs9k495hEkRaOGkTmZKR3Db/2yCKSoS3Jst3D4aohj4yldb3XsQzYgXUVJGz 49GbzfvbD3R9AIzAtggW9t8SPqEbkialMlD6WyTcGe/uLbmtgmypacxIWOPNYnC8 FRlwVzBpEburTI6AY+gkFzy4mOUjyIEEoUvAPDq9QcoMekBAI2j+8jFqpiPLKA2b rLDNP8iKl59NT+6Wd1uPrC0CAwEAAaOCAbUwggGxMAsGA1UdDwQEAwIFIDBjBgNV HSAEXDBaMFgGCWB8ZQgFAQEDBDBLMEkGCCsGAQUFBwICMD0aO0xpbWl0ZWQgTGlh YmlsaXR5LiBTZWUgQ1AgLSBSZXNwb25zYWJpbGl06SBsaW1pdOllLiBWb2lyIFBD MFgGCWCGSAGG+mseAQRLDElUaGUgcHJpdmF0ZSBrZXkgY29ycmVzcG9uZGluZyB0 byB0aGlzIGNlcnRpZmljYXRlIG1heSBoYXZlIGJlZW4gZXhwb3J0ZWQuMBoGA1Ud EQQTMBGBD2psZXdpc0Aya2V5cy5jYTBhBgNVHR8EWjBYMFagVKBSpFAwTjELMAkG A1UEBhMCQ0ExCzAJBgNVBAoTAkdDMRAwDgYDVQQLEwdHU1MtU1BHMRAwDgYDVQQL EwcxQ0EtQUMxMQ4wDAYDVQQDEwVDUkwyMTAfBgNVHSMEGDAWgBQwYABRkUGhMdI7 jb+1G1Ooe101NDAdBgNVHQ4EFgQUTI2eVCBstEC+DinoSI+cBuorKjwwCQYDVR0T BAIwADAZBgkqhkiG9n0HQQAEDDAKGwRWOC4yAwIEMDANBgkqhkiG9w0BAQsFAAOC AQEAo1kL0yqJFwEtGba2apyEnpfBv64AMd4YqUNeDbogGMVzawKERyU5LGOBFyf9 EzCsxQn9DbLKRFEcX7ppVrzssFfgHcOl/sRy0g7H3OWMQ/t8sOGePGnuxdykJfqP /f/cdQJGAz8djR3GWkS3glonIyyMtcFjd39hLCgMCRcUXYO++udwDgBFKLqrfRLe MCKDwmU5/wqMasAQIOibsrha7fj4CFOZDZlmQElNIngwnhtvlVM4WIJ/FgbyLf3A v57bpMeONFGks1C5OP5xYX6Kra+1/vecsIrda6r/Y9lFsZcCuLGMMGssJbkgBu9z EUiHnwMrYPpXm6Xm7N/XK2gj3w==           </ds:X509Certificate></ds:X509Data></ds:KeyInfo><EncryptionMethod Algorithm="http://www.w3.org/2001/04/xmlenc#aes128-cbc"><xenc:KeySize xmlns:xenc="http://www.w3.org/2001/04/xmlenc#">128</xenc:KeySize></EncryptionMethod></KeyDescriptor><SingleLogoutService Binding="urn:oasis:names:tc:SAML:2.0:bindings:SOAP" Location="https://te.clegc-gckey.gc.ca/j/IDPSloSoap/metaAlias/GCKey/idp"/><SingleLogoutService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect" Location="https://te.clegc-gckey.gc.ca/j/IDPSloRedirect/metaAlias/GCKey/idp" ResponseLocation="https://te.clegc-gckey.gc.ca/j/IDPSloRedirect/metaAlias/GCKey/idp"/><NameIDFormat>urn:oasis:names:tc:SAML:2.0:nameid-format:persistent</NameIDFormat><SingleSignOnService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect" Location="https://te.clegc-gckey.gc.ca/j/SSORedirect/metaAlias/GCKey/idp"/></IDPSSODescriptor></EntityDescriptor>]]></Item>
+            <!-- End of Partner Entity Item -->
+          </Metadata>
+          <CryptographicKeys>
+            <Key Id="MetadataSigning" StorageReferenceId="B2C_1A_GCKEYSigningCert" />
+            <Key Id="SamlAssertionSigning" StorageReferenceId="B2C_1A_GCKEYSigningCert" />
+            <Key Id="SamlMessageSigning" StorageReferenceId="B2C_1A_GCKEYSigningCert" />
+            <Key Id="SamlAssertionDecryption" StorageReferenceId="B2C_1A_GCKEYEncryptionCert" />
+          </CryptographicKeys>
+          <OutputClaims>
+            <OutputClaim ClaimTypeReferenceId="issuerUserId" PartnerClaimType="https://te.clegc-gckey.gc.ca" />
+            <OutputClaim ClaimTypeReferenceId="nameid" PartnerClaimType="https://te.clegc-gckey.gc.ca" />
+            <OutputClaim ClaimTypeReferenceId="authenticationSource" DefaultValue="externalIdp" />
+            <OutputClaim ClaimTypeReferenceId="identityProvider" DefaultValue="https://te.clegc-gckey.gc.ca" />
+          </OutputClaims>
+          <OutputClaimsTransformations>
+            <OutputClaimsTransformation ReferenceId="CreateRandomUPNUserName" />
+            <OutputClaimsTransformation ReferenceId="CreateUserPrincipalName" />
+            <OutputClaimsTransformation ReferenceId="2KeysCreateAlternativeSecurityId" />
+            <OutputClaimsTransformation ReferenceId="2KeysCreateSubjectClaimFromAlternativeSecurityId" />
+          </OutputClaimsTransformations>
+          <UseTechnicalProfileForSessionManagement ReferenceId="SM-Saml" />
+        </TechnicalProfile>
+      </TechnicalProfiles>
+    </ClaimsProvider>
+    <!-- Sample: SecureKey Test my version Token Issuer technical profile -->
+    <ClaimsProvider>
+      <Domain>SecureKey</Domain>
+      <DisplayName>SecureKey</DisplayName>
+      <TechnicalProfiles>
+        <TechnicalProfile Id="SecureKeyIdp">
+          <DisplayName>SecureKeyIdp</DisplayName>
+          <Description>Login with your Secure Key account</Description>
+          <Protocol Name="SAML2" />
+          <Metadata>
+            <!-- Keys for making sure the assertion is signed -->
+            <Item Key="RequestsSigned">true</Item>
+            <Item Key="WantsEncryptedAssertions">true</Item>
+            <Item Key="WantsSignedAssertions">true</Item>
+            <Item Key="ResponsesSigned">false</Item>
+            <Item Key="XmlSignatureAlgorithm">Sha256</Item>
+            <!-- The GCKey requires the NameID attribute in the SAML request, these next two lines add them -->
+            <Item Key="NameIdPolicyAllowCreate">true</Item>
+            <Item Key="NameIdPolicyFormat">urn:oasis:names:tc:SAML:2.0:nameid-format:persistent</Item>
+            <!-- Metadata as raw XML -->
+            <Item Key="PartnerEntity"><![CDATA[<?xml version="1.0" encoding="UTF-8"?><EntityDescriptor xmlns="urn:oasis:names:tc:SAML:2.0:metadata" xmlns:ds="http://www.w3.org/2000/09/xmldsig#" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" ID="UATCBS12735cb82085a49c9017c3d41a1563ae26cd" entityID="https://cbs-uat-cbs.securekey.com"><ds:Signature xmlns:ds="http://www.w3.org/2000/09/xmldsig#"> <ds:SignedInfo> <ds:CanonicalizationMethod Algorithm="http://www.w3.org/2001/10/xml-exc-c14n#"/> <ds:SignatureMethod Algorithm="http://www.w3.org/2001/04/xmldsig-more#rsa-sha256"/> <ds:Reference URI="#UATCBS12735cb82085a49c9017c3d41a1563ae26cd"> <ds:Transforms> <ds:Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature"/> <ds:Transform Algorithm="http://www.w3.org/2001/10/xml-exc-c14n#"/> </ds:Transforms> <ds:DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256"/> <ds:DigestValue>tlFxfRSjDM2Cq2xnjRh93e7SSU7nzhP9iNM1Q3OuJfw=</ds:DigestValue> </ds:Reference> </ds:SignedInfo> <ds:SignatureValue> S1WtcHwJJ7JYb/sizg7lSmmRk7mWfSrCixJojZk9JvwHEHJerkqP//b+H4gB+AUvo8piEQ4aYtcZ JfeZUuyE635YsU9fX2lxcix0/XeBlU3j4ZHqJVew1XfQ/+y3a88BRbIoIz5SAvebnS78LQRTgNi2 nIbguzyJt0tQiOyycLQGaK5cQ+GXHuCSd26c3P9BHFXMyyz4U6i49DlyGL0bgvUnZQyw+rzsquFI mGoFscbOpUUnksxp4w6ZU630Ya7yEIJbXkDBPTZSbU/4pfhnC6UDvhl/dKFgVSeSpfNaBFnU9W4G PVWksOlS8vQbwtjb097G8ARU61ZQvTaQMwMAGg== </ds:SignatureValue> <ds:KeyInfo> <ds:KeyValue> <ds:RSAKeyValue> <ds:Modulus> qSmc6SNp6K/3ixyST3fl5/U6aSOlRQG6B4dB+l08DC5nnJ09hragVvyvLKXWfcaKxaLT2kUd/j+E C4PDXr0e3tlt+AlvX0inluUFyCF8ESGC07abBwDh5+I9dsWviNhNdxm8j6BHN/ED2lDm87riPT6O L1+VArOqWM3nvJ39v2VN6fZDbvT+LNlWUQ0q+1FWcdmJWL4EfLMgBWCiWGzVLiRyEIHG9CT3TP2y SPStCFFf5QXFrV+z01Une+whMYg74uiYM8pCA+1x0vSzWltQcxYyQaD/L52pAYjrjCPWhw9cBrhM WW2x9iDfgaxtzx/KRTlBZEdYO+e7FhuImeGFvw== </ds:Modulus> <ds:Exponent>AQAB</ds:Exponent> </ds:RSAKeyValue> </ds:KeyValue> <ds:X509Data> <ds:X509Certificate> MIIExjCCA66gAwIBAgIEVaABvDANBgkqhkiG9w0BAQsFADA+MQswCQYDVQQGEwJDQTELMAkGA1UE ChMCR0MxEDAOBgNVBAsTB0dTUy1TUEcxEDAOBgNVBAsTBzFDQS1BQzEwHhcNMTkwNTEzMTUwODQw WhcNMjIwNDE4MDA1NTAwWjBCMQswCQYDVQQGEwJDQTELMAkGA1UEChMCR0MxEDAOBgNVBAsTB3Nz Yy1zcGMxFDASBgNVBAMTC0dDQ0ZDQlNVQVQzMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKC AQEAqSmc6SNp6K/3ixyST3fl5/U6aSOlRQG6B4dB+l08DC5nnJ09hragVvyvLKXWfcaKxaLT2kUd /j+EC4PDXr0e3tlt+AlvX0inluUFyCF8ESGC07abBwDh5+I9dsWviNhNdxm8j6BHN/ED2lDm87ri PT6OL1+VArOqWM3nvJ39v2VN6fZDbvT+LNlWUQ0q+1FWcdmJWL4EfLMgBWCiWGzVLiRyEIHG9CT3 TP2ySPStCFFf5QXFrV+z01Une+whMYg74uiYM8pCA+1x0vSzWltQcxYyQaD/L52pAYjrjCPWhw9c BrhMWW2x9iDfgaxtzx/KRTlBZEdYO+e7FhuImeGFvwIDAQABo4IBxjCCAcIwCwYDVR0PBAQDAgeA MGMGA1UdIARcMFowWAYJYHxlCAUBAgMEMEswSQYIKwYBBQUHAgIwPRo7TGltaXRlZCBMaWFiaWxp dHkuIFNlZSBDUCAtIFJlc3BvbnNhYmlsaXTpIGxpbWl06WUuIFZvaXIgUEMwWAYJYIZIAYb6ax4B BEsMSVRoZSBwcml2YXRlIGtleSBjb3JyZXNwb25kaW5nIHRvIHRoaXMgY2VydGlmaWNhdGUgbWF5 IGhhdmUgYmVlbiBleHBvcnRlZC4wYQYDVR0fBFowWDBWoFSgUqRQME4xCzAJBgNVBAYTAkNBMQsw CQYDVQQKEwJHQzEQMA4GA1UECxMHR1NTLVNQRzEQMA4GA1UECxMHMUNBLUFDMTEOMAwGA1UEAxMF Q1JMMjEwKwYDVR0QBCQwIoAPMjAxOTA1MTMxNTA4NDBagQ8yMDIyMDQxODAwNTUwMFowHwYDVR0j BBgwFoAUMGAAUZFBoTHSO42/tRtTqHtdNTQwHQYDVR0OBBYEFL3xFYpQRpDf5dH+vzkbB3DX5FEf MAkGA1UdEwQCMAAwGQYJKoZIhvZ9B0EABAwwChsEVjguMgMCBDAwDQYJKoZIhvcNAQELBQADggEB AJGIXkoi6A7oHHE0jQ6nGxR/DWXlcp9n314laAZIXKfJGqrmPiJFKEeLDkK6qRrsS5qHXaVAAFQY f0Ip1h7aJxOZh/LY29iYaQakUPP+9rGhZdjoQcR7KjaMs1tsK4Vqt05rILfeV2ogDWMEVHZV5VZ5 I09VceK3H7hlvKBE8obt+UVpFzO71I+pPSW9rlWURyMuIllEoTAubYVWFyxXKWpATzid2z2Uuiyv y3DXkKMsjnuxYCeB+vvlq25U/fIRo08Fl99g30JF2ooX10pKmf5Im9oRldfq/79VY2JurrMntx/9 AAvRMXBXGVX2OUu9xjPoCvxGxLdW8oa+iswT00U= </ds:X509Certificate> </ds:X509Data> </ds:KeyInfo> </ds:Signature> <IDPSSODescriptor WantAuthnRequestsSigned="true" protocolSupportEnumeration="urn:oasis:names:tc:SAML:2.0:protocol"> <Extensions> <ns1:EntityAttributes xmlns:ns1="urn:oasis:names:tc:SAML:metadata:attribute"> <ns2:Attribute xmlns:ns2="urn:oasis:names:tc:SAML:2.0:assertion" Name="urn:oasis:names:tc:SAML:attribute:assurance-certification" NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:uri"> <ns2:AttributeValue>urn:gc-ca:cyber-auth:assurance:loa2 </ns2:AttributeValue> <ns2:AttributeValue>urn:gc-ca:cyber-auth:assurance:loa3 </ns2:AttributeValue> </ns2:Attribute> </ns1:EntityAttributes> <mdui:UIInfo xmlns:mdui="urn:oasis:names:tc:SAML:metadata:ui"> <mdui:DisplayName xml:lang="en">CBS</mdui:DisplayName> <mdui:DisplayName xml:lang="fr">FSJ</mdui:DisplayName> </mdui:UIInfo> </Extensions> <KeyDescriptor use="signing"> <ds:KeyInfo> <ds:X509Data> <ds:X509Certificate> MIIExjCCA66gAwIBAgIEVaABvDANBgkqhkiG9w0BAQsFADA+MQswCQYDVQQGEwJD QTELMAkGA1UEChMCR0MxEDAOBgNVBAsTB0dTUy1TUEcxEDAOBgNVBAsTBzFDQS1B QzEwHhcNMTkwNTEzMTUwODQwWhcNMjIwNDE4MDA1NTAwWjBCMQswCQYDVQQGEwJD QTELMAkGA1UEChMCR0MxEDAOBgNVBAsTB3NzYy1zcGMxFDASBgNVBAMTC0dDQ0ZD QlNVQVQzMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAqSmc6SNp6K/3 ixyST3fl5/U6aSOlRQG6B4dB+l08DC5nnJ09hragVvyvLKXWfcaKxaLT2kUd/j+E C4PDXr0e3tlt+AlvX0inluUFyCF8ESGC07abBwDh5+I9dsWviNhNdxm8j6BHN/ED 2lDm87riPT6OL1+VArOqWM3nvJ39v2VN6fZDbvT+LNlWUQ0q+1FWcdmJWL4EfLMg BWCiWGzVLiRyEIHG9CT3TP2ySPStCFFf5QXFrV+z01Une+whMYg74uiYM8pCA+1x 0vSzWltQcxYyQaD/L52pAYjrjCPWhw9cBrhMWW2x9iDfgaxtzx/KRTlBZEdYO+e7 FhuImeGFvwIDAQABo4IBxjCCAcIwCwYDVR0PBAQDAgeAMGMGA1UdIARcMFowWAYJ YHxlCAUBAgMEMEswSQYIKwYBBQUHAgIwPRo7TGltaXRlZCBMaWFiaWxpdHkuIFNl ZSBDUCAtIFJlc3BvbnNhYmlsaXTpIGxpbWl06WUuIFZvaXIgUEMwWAYJYIZIAYb6 ax4BBEsMSVRoZSBwcml2YXRlIGtleSBjb3JyZXNwb25kaW5nIHRvIHRoaXMgY2Vy dGlmaWNhdGUgbWF5IGhhdmUgYmVlbiBleHBvcnRlZC4wYQYDVR0fBFowWDBWoFSg UqRQME4xCzAJBgNVBAYTAkNBMQswCQYDVQQKEwJHQzEQMA4GA1UECxMHR1NTLVNQ RzEQMA4GA1UECxMHMUNBLUFDMTEOMAwGA1UEAxMFQ1JMMjEwKwYDVR0QBCQwIoAP MjAxOTA1MTMxNTA4NDBagQ8yMDIyMDQxODAwNTUwMFowHwYDVR0jBBgwFoAUMGAA UZFBoTHSO42/tRtTqHtdNTQwHQYDVR0OBBYEFL3xFYpQRpDf5dH+vzkbB3DX5FEf MAkGA1UdEwQCMAAwGQYJKoZIhvZ9B0EABAwwChsEVjguMgMCBDAwDQYJKoZIhvcN AQELBQADggEBAJGIXkoi6A7oHHE0jQ6nGxR/DWXlcp9n314laAZIXKfJGqrmPiJF KEeLDkK6qRrsS5qHXaVAAFQYf0Ip1h7aJxOZh/LY29iYaQakUPP+9rGhZdjoQcR7 KjaMs1tsK4Vqt05rILfeV2ogDWMEVHZV5VZ5I09VceK3H7hlvKBE8obt+UVpFzO7 1I+pPSW9rlWURyMuIllEoTAubYVWFyxXKWpATzid2z2Uuiyvy3DXkKMsjnuxYCeB +vvlq25U/fIRo08Fl99g30JF2ooX10pKmf5Im9oRldfq/79VY2JurrMntx/9AAvR MXBXGVX2OUu9xjPoCvxGxLdW8oa+iswT00U= </ds:X509Certificate> </ds:X509Data> </ds:KeyInfo> </KeyDescriptor> <KeyDescriptor use="encryption"> <ds:KeyInfo> <ds:X509Data> <ds:X509Certificate> MIIEmTCCA4GgAwIBAgIEVaABvTANBgkqhkiG9w0BAQsFADA+MQswCQYDVQQGEwJD QTELMAkGA1UEChMCR0MxEDAOBgNVBAsTB0dTUy1TUEcxEDAOBgNVBAsTBzFDQS1B QzEwHhcNMTkwNTEzMTUwODQwWhcNMjIwNDE4MDA1NTAwWjBCMQswCQYDVQQGEwJD QTELMAkGA1UEChMCR0MxEDAOBgNVBAsTB3NzYy1zcGMxFDASBgNVBAMTC0dDQ0ZD QlNVQVQzMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAuSMy8JLOV0rJ BLMSFT8K0gfMbnh6Qi7oVV03DbFewsBU4rfbTkuXtSrAKW9C9OOYh8Dkt8aWq/eh kRQdzUw9XbPwEUMHlnspnYCRDBmuk3lMiHhnRtQVLlaBYvnmRm1eZuHwf1+xswZW n5F9qaBu41G4F4uPZz2vj7zNM9skTh7OolIJ9+T3CK3aP2yT6hCQUvTQ7DGhhgoO 8OcVfsRp4LXjdZbxJigy5pBgvJJktE2Ioif1TfPj2QHbm8byxcTV9WNKzK2DR/G6 ArLmMxc/G1cL+ggnzam6X1QjFMBcg+Qq1pGj+WuJSe6zykUjLe5FpVxTwjHE41z7 WTCRGDLUfwIDAQABo4IBmTCCAZUwYwYDVR0gBFwwWjBYBglgfGUIBQEBAwQwSzBJ BggrBgEFBQcCAjA9GjtMaW1pdGVkIExpYWJpbGl0eS4gU2VlIENQIC0gUmVzcG9u c2FiaWxpdOkgbGltaXTpZS4gVm9pciBQQzBYBglghkgBhvprHgEESwxJVGhlIHBy aXZhdGUga2V5IGNvcnJlc3BvbmRpbmcgdG8gdGhpcyBjZXJ0aWZpY2F0ZSBtYXkg aGF2ZSBiZWVuIGV4cG9ydGVkLjBhBgNVHR8EWjBYMFagVKBSpFAwTjELMAkGA1UE BhMCQ0ExCzAJBgNVBAoTAkdDMRAwDgYDVQQLEwdHU1MtU1BHMRAwDgYDVQQLEwcx Q0EtQUMxMQ4wDAYDVQQDEwVDUkwyMTALBgNVHQ8EBAMCBSAwHwYDVR0jBBgwFoAU MGAAUZFBoTHSO42/tRtTqHtdNTQwHQYDVR0OBBYEFEhB4WI1maGHVZnQbemZD/NN lnXQMAkGA1UdEwQCMAAwGQYJKoZIhvZ9B0EABAwwChsEVjguMgMCBBAwDQYJKoZI hvcNAQELBQADggEBAD8kWXcQ8h3653Bq3KYhaoPX3HEDqV3r2b+6/3MdNCyBldP2 KUa7tiVCFpGjdc4iyl98jwih3gT7l+8CUX0cDsHEwMmwIsPEeYd2Q4ugvVQzv980 teKGQYKqMC3260sYlrCTuBGUrdaSHFcgOPJejkPPr7lCreSkTXewf4hHZC2RcXgZ JA35lx32NgX0xVIieIB4h5SGg3zP5T2yY/0WuSUfP1OcWT9mh+hKLV9Mex09CLyN RMqll3SHN5lfT0OQ0JaHynPpDiTi/4fUi8bhxkwzgc3dvg5NoJmInRi9vnRjbc6T qxqTDXVQRv01qkl4b/Q1irTIDt8OgKNCPffcsp8= </ds:X509Certificate> </ds:X509Data> </ds:KeyInfo> <EncryptionMethod Algorithm="http://www.w3.org/2001/04/xmlenc#aes128-cbc"> <xenc:KeySize xmlns:xenc="http://www.w3.org/2001/04/xmlenc#">128</xenc:KeySize> </EncryptionMethod> </KeyDescriptor> <SingleLogoutService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect" Location="https://cbs-uat-cbs.securekey.com/cbs/profile/SAML2/Redirect/SLO"/> <SingleLogoutService Binding="urn:oasis:names:tc:SAML:2.0:bindings:SOAP" Location="https://cbs-uat-cbs.securekey.com/cbs/profile/SAML2/SOAP/SLO"/> <NameIDFormat>urn:oasis:names:tc:SAML:2.0:nameid-format:persistent </NameIDFormat> <SingleSignOnService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect" Location="https://cbs-uat-cbs.securekey.com/cbs/profile/SAML2/Redirect/SSO"/> </IDPSSODescriptor> </EntityDescriptor>]]></Item>
+            <!-- End of Partner Entity Item-->
+          </Metadata>
+          <CryptographicKeys>
+            <!-- <Key Id="MetadataSigning" StorageReferenceId="B2C_1A_GCKEYSigningCert" /> -->
+            <Key Id="SamlAssertionSigning" StorageReferenceId="B2C_1A_GCKEYSigningCert" />
+            <Key Id="SamlMessageSigning" StorageReferenceId="B2C_1A_GCKEYSigningCert" />
+            <Key Id="SamlAssertionDecryption" StorageReferenceId="B2C_1A_GCKEYEncryptionCert" />
+          </CryptographicKeys>
+          <OutputClaims>
+            <OutputClaim ClaimTypeReferenceId="issuerUserId" PartnerClaimType="https://$tenantId.b2clogin.com/$tenantId/B2C_1A_TrustFrameworkBase" />
+            <OutputClaim ClaimTypeReferenceId="nameid" PartnerClaimType="https://cbs-uat-cbs.securekey.com" />
+            <OutputClaim ClaimTypeReferenceId="authenticationSource" DefaultValue="externalIdp" />
+            <OutputClaim ClaimTypeReferenceId="identityProvider" DefaultValue="https://cbs-uat-cbs.securekey.com" />
+          </OutputClaims>
+          <OutputClaimsTransformations>
+            <OutputClaimsTransformation ReferenceId="CreateRandomUPNUserName" />
+            <OutputClaimsTransformation ReferenceId="CreateUserPrincipalName" />
+            <OutputClaimsTransformation ReferenceId="CreateAlternativeSecurityId" />
+            <OutputClaimsTransformation ReferenceId="CreateSubjectClaimFromAlternativeSecurityId" />
+          </OutputClaimsTransformations>
+          <UseTechnicalProfileForSessionManagement ReferenceId="SM-Saml" />
+        </TechnicalProfile>
+      </TechnicalProfiles>
+    </ClaimsProvider>
+  </ClaimsProviders>
+  <UserJourneys>
+    <UserJourney Id="SignUpOrSignIn2Keys">
+      <OrchestrationSteps>
+        <OrchestrationStep Order="1" Type="CombinedSignInAndSignUp" ContentDefinitionReferenceId="api.signuporsignin">
+          <ClaimsProviderSelections>
+            <ClaimsProviderSelection TargetClaimsExchangeId="GCKeyExchange" />
+          </ClaimsProviderSelections>
+          <ClaimsExchanges></ClaimsExchanges>
+        </OrchestrationStep>
+        <!-- Check if the user has selected to sign in using one of the external providers -->
+        <OrchestrationStep Order="2" Type="ClaimsExchange">
+          <Preconditions>
+            <Precondition Type="ClaimsExist" ExecuteActionsIf="true">
+              <Value>nameid</Value>
+              <Action>SkipThisOrchestrationStep</Action>
+            </Precondition>
+          </Preconditions>
+          <ClaimsExchanges>
+            <ClaimsExchange Id="GCKeyExchange" TechnicalProfileReferenceId="2KeysSP" />
+          </ClaimsExchanges>
+        </OrchestrationStep>
+        <!-- For external IDP authentication, attempt to find the user account in the directory. -->
+        <OrchestrationStep Order="3" Type="ClaimsExchange">
+          <Preconditions>
+            <Precondition Type="ClaimEquals" ExecuteActionsIf="true">
+              <Value>authenticationSource</Value>
+              <Value>localAccountAuthentication</Value>
+              <Action>SkipThisOrchestrationStep</Action>
+            </Precondition>
+          </Preconditions>
+          <ClaimsExchanges>
+            <ClaimsExchange Id="AADUserReadUsingAlternativeSecurityId" TechnicalProfileReferenceId="AAD-UserReadUsingAlternativeSecurityId-NoError" />
+          </ClaimsExchanges>
+        </OrchestrationStep>
+        <!-- Automatically write the user data if the directory does not have the user account already (i.e. we do not have an objectId). 
+          This can only happen when authentication happened using an external IDP. -->
+        <OrchestrationStep Order="4" Type="ClaimsExchange">
+          <Preconditions>
+            <Precondition Type="ClaimsExist" ExecuteActionsIf="true">
+              <Value>objectId</Value>
+              <Action>SkipThisOrchestrationStep</Action>
+            </Precondition>
+          </Preconditions>
+          <ClaimsExchanges>
+            <ClaimsExchange Id="AAD-UserWriteUsingAlternativeSecurityId" TechnicalProfileReferenceId="AAD-UserWriteUsingAlternativeSecurityId" />
+          </ClaimsExchanges>
+        </OrchestrationStep>
+        <!-- This step reads any user attributes that we may not have received when authenticating using ESTS so they can be sent 
+          in the token. -->
+        <OrchestrationStep Order="5" Type="ClaimsExchange">
+          <Preconditions>
+            <Precondition Type="ClaimEquals" ExecuteActionsIf="true">
+              <Value>authenticationSource</Value>
+              <Value>socialIdpAuthentication</Value>
+              <Action>SkipThisOrchestrationStep</Action>
+            </Precondition>
+          </Preconditions>
+          <ClaimsExchanges>
+            <ClaimsExchange Id="AADUserReadWithObjectId" TechnicalProfileReferenceId="AAD-UserReadUsingObjectId" />
+          </ClaimsExchanges>
+        </OrchestrationStep>
+        <!-- Create the user in the directory if one does not already exist 
+             (verified using objectId which would be set from the last step if account was created in the directory). -->
+        <OrchestrationStep Order="6" Type="ClaimsExchange">
+          <Preconditions>
+            <Precondition Type="ClaimsExist" ExecuteActionsIf="true">
+              <Value>objectId</Value>
+              <Action>SkipThisOrchestrationStep</Action>
+            </Precondition>
+          </Preconditions>
+          <ClaimsExchanges>
+            <ClaimsExchange Id="AADUserWrite" TechnicalProfileReferenceId="AAD-UserWriteUsingAlternativeSecurityId" />
+          </ClaimsExchanges>
+        </OrchestrationStep>
+        <OrchestrationStep Order="7" Type="SendClaims" CpimIssuerTechnicalProfileReferenceId="JwtIssuer" />
+        <!-- <OrchestrationStep Order="7" Type="SendClaims" CpimIssuerTechnicalProfileReferenceId="SAMLtestIdP" /> -->
+      </OrchestrationSteps>
+      <ClientDefinition ReferenceId="DefaultWeb" />
+    </UserJourney>
+    <UserJourney Id="SignUpOrSignInSecureKey">
+      <OrchestrationSteps>
+        <OrchestrationStep Order="1" Type="CombinedSignInAndSignUp" ContentDefinitionReferenceId="api.signuporsignin">
+          <ClaimsProviderSelections>
+            <ClaimsProviderSelection TargetClaimsExchangeId="SecureKeyExchange" />
+          </ClaimsProviderSelections>
+          <ClaimsExchanges></ClaimsExchanges>
+        </OrchestrationStep>
+        <!-- Check if the user has selected to sign in using one of the external providers -->
+        <OrchestrationStep Order="2" Type="ClaimsExchange">
+          <Preconditions>
+            <Precondition Type="ClaimsExist" ExecuteActionsIf="true">
+              <Value>objectId</Value>
+              <Action>SkipThisOrchestrationStep</Action>
+            </Precondition>
+          </Preconditions>
+          <ClaimsExchanges>
+            <ClaimsExchange Id="SecureKeyExchange" TechnicalProfileReferenceId="SecureKeyIdp" />
+          </ClaimsExchanges>
+        </OrchestrationStep>
+        <!-- For external IDP authentication, attempt to find the user account in the directory. -->
+        <OrchestrationStep Order="3" Type="ClaimsExchange">
+          <Preconditions>
+            <Precondition Type="ClaimEquals" ExecuteActionsIf="true">
+              <Value>authenticationSource</Value>
+              <Value>localAccountAuthentication</Value>
+              <Action>SkipThisOrchestrationStep</Action>
+            </Precondition>
+          </Preconditions>
+          <ClaimsExchanges>
+            <ClaimsExchange Id="AADUserReadUsingAlternativeSecurityId" TechnicalProfileReferenceId="AAD-UserReadUsingAlternativeSecurityId-NoError" />
+          </ClaimsExchanges>
+        </OrchestrationStep>
+        <!-- Automatically write the user data if the directory does not have the user account already (i.e. we do not have an objectId). 
+          This can only happen when authentication happened using an external IDP. -->
+        <OrchestrationStep Order="4" Type="ClaimsExchange">
+          <Preconditions>
+            <Precondition Type="ClaimsExist" ExecuteActionsIf="true">
+              <Value>objectId</Value>
+              <Action>SkipThisOrchestrationStep</Action>
+            </Precondition>
+          </Preconditions>
+          <ClaimsExchanges>
+            <ClaimsExchange Id="AAD-UserWriteUsingAlternativeSecurityId" TechnicalProfileReferenceId="AAD-UserWriteUsingAlternativeSecurityId" />
+          </ClaimsExchanges>
+        </OrchestrationStep>
+        <!-- This step reads any user attributes that we may not have received when authenticating using ESTS so they can be sent 
+          in the token. -->
+        <OrchestrationStep Order="5" Type="ClaimsExchange">
+          <Preconditions>
+            <Precondition Type="ClaimEquals" ExecuteActionsIf="true">
+              <Value>authenticationSource</Value>
+              <Value>socialIdpAuthentication</Value>
+              <Action>SkipThisOrchestrationStep</Action>
+            </Precondition>
+          </Preconditions>
+          <ClaimsExchanges>
+            <ClaimsExchange Id="AADUserReadWithObjectId" TechnicalProfileReferenceId="AAD-UserReadUsingObjectId" />
+          </ClaimsExchanges>
+        </OrchestrationStep>
+        <!-- Create the user in the directory if one does not already exist 
+             (verified using objectId which would be set from the last step if account was created in the directory). -->
+        <OrchestrationStep Order="6" Type="ClaimsExchange">
+          <Preconditions>
+            <Precondition Type="ClaimsExist" ExecuteActionsIf="true">
+              <Value>objectId</Value>
+              <Action>SkipThisOrchestrationStep</Action>
+            </Precondition>
+          </Preconditions>
+          <ClaimsExchanges>
+            <ClaimsExchange Id="AADUserWrite" TechnicalProfileReferenceId="AAD-UserWriteUsingAlternativeSecurityId" />
+          </ClaimsExchanges>
+        </OrchestrationStep>
+        <OrchestrationStep Order="7" Type="SendClaims" CpimIssuerTechnicalProfileReferenceId="JwtIssuer" />
+      </OrchestrationSteps>
+      <ClientDefinition ReferenceId="DefaultWeb" />
+    </UserJourney>
+  </UserJourneys>
+</TrustFrameworkPolicy>

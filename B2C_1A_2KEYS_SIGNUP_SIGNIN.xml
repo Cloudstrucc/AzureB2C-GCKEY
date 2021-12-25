@@ -1,0 +1,19 @@
+<TrustFrameworkPolicy xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="http://schemas.microsoft.com/online/cpim/schemas/2013/06" PolicySchemaVersion="0.3.0.0" TenantId="$tenantId" PolicyId="B2C_1A_2KEYS_signup_signin" PublicPolicyUri="http://$tenantId/B2C_1A_2KEYS_signup_signin" TenantObjectId="$TenantObjectId">
+  <BasePolicy>
+    <TenantId>$tenantId</TenantId>
+    <PolicyId>B2C_1A_TrustFrameworkExtensions</PolicyId>
+  </BasePolicy>
+  <RelyingParty>
+    <DefaultUserJourney ReferenceId="SignUpOrSignIn2Keys" />
+    <TechnicalProfile Id="PolicyProfile">
+      <DisplayName>PolicyProfile</DisplayName>
+      <Protocol Name="OpenIdConnect" />
+      <OutputClaims>
+        <OutputClaim ClaimTypeReferenceId="issuerUserId" PartnerClaimType="assertionSubjectName" />
+        <OutputClaim ClaimTypeReferenceId="identityProvider" />
+        <OutputClaim ClaimTypeReferenceId="trustFrameworkPolicy" Required="true" DefaultValue="{policy}" />
+      </OutputClaims>
+      <SubjectNamingInfo ClaimType="assertionSubjectName" />
+    </TechnicalProfile>
+  </RelyingParty>
+</TrustFrameworkPolicy>4
